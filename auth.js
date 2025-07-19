@@ -1,11 +1,7 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+// auth.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// Your Firebase project settings
 const firebaseConfig = {
   apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
   authDomain: "mentospark-23ad1.firebaseapp.com",
@@ -15,7 +11,6 @@ const firebaseConfig = {
   appId: "1:164763516722:web:8907112c1b6ad4e6f2212b"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -26,13 +21,13 @@ window.signup = function () {
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      alert("Signup successful! Please login.");
-      window.location.href = "login.html";  // redirect to login
+      alert("Signup successful!");
+      window.location.href = "login.html"; // redirect to login
     })
     .catch((error) => {
-      alert("Signup error: " + error.message);
+      alert("Signup failed: " + error.message);
     });
-};
+}
 
 // Login Function
 window.login = function () {
@@ -42,9 +37,9 @@ window.login = function () {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       alert("Login successful!");
-      window.location.href = "dashboard.html";  // you can create this page later
+      window.location.href = "dashboard.html"; // your next page
     })
     .catch((error) => {
-      alert("Login error: " + error.message);
+      alert("Login failed: " + error.message);
     });
-};
+}
