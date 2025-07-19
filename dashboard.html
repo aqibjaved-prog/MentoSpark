@@ -5,13 +5,13 @@
 </head>
 <body>
   <h2>Welcome to MentoSpark Dashboard</h2>
-  <p id="user-info">Checking login...</p>
+  <p id="status">Checking login...</p>
 
-  <div id="admin-panel" style="display: none;">
-    <h3>Upload Notes / PYQs</h3>
+  <div id="uploadSection" style="display: none;">
+    <h3>Upload File</h3>
     <input type="file" id="fileInput"><br><br>
-    <button onclick="uploadFile()">Upload File</button>
-    <p id="upload-status"></p>
+    <button onclick="uploadFile()">Upload</button>
+    <p id="uploadMessage"></p>
   </div>
 
   <script type="module">
@@ -33,31 +33,38 @@
     const auth = getAuth();
     const storage = getStorage();
 
-    const adminEmail = "mohdamaan5512@gmail.com"; // ← Replace with your admin email
+    // ✅ Only this email can upload
+    const allowedEmails = ["mohdamaan5512@gmail.com"];
 
     onAuthStateChanged(auth, (user) => {
-      const info = document.getElementById("user-info");
       if (user) {
-        info.innerText = Logged in as ${user.email};
-        if (user.email === adminEmail) {
-          document.getElementById("admin-panel").style.display = "block";
+        document.getElementById("status").innerText = "Logged in as: " + user.email;
+        if (allowedEmails.includes(user.email)) {
+          document.getElementById("uploadSection").style.display = "block";
         } else {
-          info.innerText += "\nYou are not an admin.";
+          document.getElementById("uploadSection").innerHTML = "<p>❌ You are not allowed to upload files.</p>";
+          document.getElementById("uploadSection").style.display = "block";
         }
       } else {
-        window.location.href = "login.html"; // not logged in
+        document.getElementById("status").innerText = "Not logged in.";
       }
     });
 
-    window.uploadFile = async function () {
-      const file = document.getElementById("fileInput").files[0];
+    window.uploadFile = function () {
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
       if (!file) {
-        alert("Please choose a file");
+        alert("Please select a file.");
         return;
       }
-      const storageRef = ref(storage, uploads/${file.name});
-      await uploadBytes(storageRef, file);
-      document.getElementById("upload-status").innerText = "✅ File uploaded!";
+      const storageRef = ref(storage, "uploads/" + file.name);
+      uploadBytes(storageRef, file)
+        .then(() => {
+          document.getElementById("uploadMessage").innerText = "✅ File uploaded!";
+        })
+        .catch((error) => {
+          document.getElementById("uploadMessage").innerText = "❌ Upload failed: " + error.message;
+        });
     };
   </script>
 </body>
