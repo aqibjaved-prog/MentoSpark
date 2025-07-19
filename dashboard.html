@@ -2,74 +2,38 @@
 <html>
 <head>
   <title>MentoSpark Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 12px;
+    }
+    a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h2 id="status">Checking login...</h2>
-  <div id="uploadSection" style="display: none;">
-    <p>Welcome Admin or Senior Student!</p>
-    <input type="file" id="fileInput"><br><br>
-    <button onclick="uploadFile()">Upload File</button>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
-      authDomain: "mentospark-23ad1.firebaseapp.com",
-      projectId: "mentospark-23ad1",
-      storageBucket: "mentospark-23ad1.appspot.com",
-      messagingSenderId: "164763516722",
-      appId: "1:164763516722:web:8907112c1b6ad4e6f2212b",
-      measurementId: "G-1WXM0GBW68"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const storage = getStorage(app);
-
-    const allowedEmails = [
-      "mohdamaan5512@gmail.com",    // Admin
-      "senior1@example.com",        // Add seniors here
-      "senior2@example.com"
-    ];
-
-    const statusText = document.getElementById("status");
-    const uploadSection = document.getElementById("uploadSection");
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const email = user.email;
-        if (allowedEmails.includes(email)) {
-          statusText.innerText = "Logged in as " + email;
-          uploadSection.style.display = "block";
-        } else {
-          statusText.innerText = "You are logged in as " + email + ", but not allowed to upload.";
-        }
-      } else {
-        statusText.innerText = "Not logged in. Please log in first.";
-        uploadSection.style.display = "none";
-      }
-    });
-
-    window.uploadFile = async function () {
-      const fileInput = document.getElementById("fileInput");
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a file to upload.");
-        return;
-      }
-
-      const fileRef = ref(storage, 'uploads/' + file.name);
-      try {
-        await uploadBytes(fileRef, file);
-        alert("File uploaded successfully!");
-      } catch (error) {
-        alert("Upload failed: " + error.message);
-      }
-    }
-  </script>
+  <h2>📁 MentoSpark Shared Files</h2>
+  <p>Click to open/download:</p>
+  <ul>
+    <li><a href="https://drive.google.com/file/d/FILE_ID_1/view" target="_blank">📄 File 1 Name</a></li>
+    <li><a href="https://drive.google.com/file/d/FILE_ID_2/view" target="_blank">📄 File 2 Name</a></li>
+    <li><a href="https://drive.google.com/file/d/FILE_ID_3/view" target="_blank">📄 File 3 Name</a></li>
+  </ul>
 </body>
 </html>
