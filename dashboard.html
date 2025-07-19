@@ -1,37 +1,69 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - MentoSpark</title>
+</head>
+<body>
+  <h2>Welcome to MentoSpark Dashboard</h2>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
-    authDomain: "mentospark-23ad1.firebaseapp.com",
-    projectId: "mentospark-23ad1",
-    storageBucket: "mentospark-23ad1.appspot.com",
-    messagingSenderId: "164763516722",
-    appId: "1:164763516722:web:8907112c1b6ad4e6f2212b",
-    measurementId: "G-1WXM0GBW68"
-  };
+  <!-- This will show who is logged in -->
+  <p id="status">Checking login...</p>
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  <!-- This is where upload button will appear only for admin or senior -->
+  <div id="uploadSection"></div>
 
-  // List of admin or senior student emails
-  const allowedEmails = ["mohdamaan5512@gmail.com", "seniorstudent@gmail.com"];
+  <!-- Firebase Auth Script -->
+  <script type="module">
+    // Firebase setup
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  onAuthStateChanged(auth, (user) => {
-    const status = document.getElementById("status");
-    const uploadSection = document.getElementById("uploadSection");
+    const firebaseConfig = {
+      apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
+      authDomain: "mentospark-23ad1.firebaseapp.com",
+      projectId: "mentospark-23ad1",
+      storageBucket: "mentospark-23ad1.appspot.com",
+      messagingSenderId: "164763516722",
+      appId: "1:164763516722:web:8907112c1b6ad4e6f2212b",
+      measurementId: "G-1WXM0GBW68"
+    };
 
-    if (user) {
-      status.innerText = "Logged in as: " + user.email;
-      if (allowedEmails.includes(user.email)) {
-        uploadSection.innerHTML = <h3>Upload Area (Only for Admin & Senior)</h3><input type="file">;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // ✅ Add your admin and senior emails here
+    const allowedEmails = [
+      "mohdamaan5512@gmail.com",  // You (admin)
+      "senior1@gmail.com",        // Another senior student (example)
+      "senior2@gmail.com"         // Another (add more if needed)
+    ];
+
+    // ✅ Check who is logged in
+    onAuthStateChanged(auth, (user) => {
+      const status = document.getElementById("status");
+      const uploadSection = document.getElementById("uploadSection");
+
+      if (user) {
+        status.innerText = "✅ Logged in as: " + user.email;
+
+        if (allowedEmails.includes(user.email)) {
+          // ✅ Show upload option for admin/seniors
+          uploadSection.innerHTML = `
+            <h3>Upload Area (Only for Admin/Senior)</h3>
+            <input type="file"><br><br>
+            <button>Upload</button>
+          `;
+        } else {
+          // ❌ If not admin/senior
+          uploadSection.innerHTML = <p>❌ You are not allowed to upload files.</p>;
+        }
+
       } else {
-        uploadSection.innerHTML = <p>❌ You are not allowed to upload files.</p>;
+        // 🔒 Not logged in
+        status.innerText = "You are not logged in. Redirecting...";
+        window.location.href = "login.html";
       }
-    } else {
-      status.innerText = "Not logged in. Redirecting...";
-      window.location.href = "login.html";
-    }
-  });
-</script>
+    });
+  </script>
+</body>
+</html>
