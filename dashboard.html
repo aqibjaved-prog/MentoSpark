@@ -1,21 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - MentoSpark</title>
+  <title>MentoSpark Dashboard</title>
 </head>
 <body>
   <h2>Welcome to MentoSpark Dashboard</h2>
-  <p id="user-email"></p>
+  <p id="user-info">Checking login...</p>
 
-  <h3>Upload File</h3>
-  <input type="file" id="fileInput"><br><br>
-  <button onclick="uploadFile()">Upload</button>
+  <div id="admin-panel" style="display: none;">
+    <h3>Upload Notes / PYQs</h3>
+    <input type="file" id="fileInput"><br><br>
+    <button onclick="uploadFile()">Upload File</button>
+    <p id="upload-status"></p>
+  </div>
 
-  <h3>Your Files</h3>
-  <ul id="fileList"></ul>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-  <button onclick="logout()">Logout</button>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
+      authDomain: "mentospark-23ad1.firebaseapp.com",
+      projectId: "mentospark-23ad1",
+      storageBucket: "mentospark-23ad1.appspot.com",
+      messagingSenderId: "164763516722",
+      appId: "1:164763516722:web:8907112c1b6ad4e6f2212b",
+      measurementId: "G-1WXM0GBW68"
+    };
 
-  <script type="module" src="dashboard.js"></script>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const storage = getStorage();
+
+    const adminEmail = "youradmin@email.com"; // ← Replace with your admin email
+
+    onAuthStateChanged(auth, (user) => {
+      const info = document.getElementById("user-info");
+      if (user) {
+        info.innerText = Logged in as ${user.email};
+        if (user.email === adminEmail) {
+          document.getElementById("admin-panel").style.display = "block";
+        } else {
+          info.innerText += "\nYou are not an admin.";
+        }
+      } else {
+        window.location.href = "login.html"; // not logged in
+      }
+    });
+
+    window.uploadFile = async function () {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) {
+        alert("Please choose a file");
+        return;
+      }
+      const storageRef = ref(storage, uploads/${file.name});
+      await uploadBytes(storageRef, file);
+      document.getElementById("upload-status").innerText = "✅ File uploaded!";
+    };
+  </script>
 </body>
 </html>
