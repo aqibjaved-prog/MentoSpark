@@ -2,32 +2,61 @@
 <html>
 <head>
   <title>MentoSpark Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f9f9f9;
+    }
+    h2 {
+      color: #333;
+    }
+    .file-card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .file-card button {
+      margin-top: 10px;
+    }
+    #searchInput {
+      padding: 10px;
+      width: 80%;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Welcome to MentoSpark Dashboard</h2>
-  <p>You are logged in successfully.</p>
+  <h2>MentoSpark Dashboard</h2>
 
-  <h3>Available Downloads:</h3>
+  <input type="text" id="searchInput" onkeyup="filterFiles()" placeholder="Search files...">
 
-  <ul>
-    <li>
-      File 1 - Notes.pdf
-      <a href="https://drive.google.com/uc?export=download&id=1kApOvyW9jRycJKO8HM1wwr_2y5FWYW_h" target="_blank">
-        <button>Download</button>
-      </a>
-    </li>
-    <li>
-      File 2 - Assignment.docx
-      <a href="https://drive.google.com/uc?export=download&id=YOUR_FILE_ID_HERE" target="_blank">
-        <button>Download</button>
-      </a>
-    </li>
-    <li>
-      File 3 - Syllabus.pdf
-      <a href="https://drive.google.com/uc?export=download&id=YOUR_FILE_ID_HERE" target="_blank">
-        <button>Download</button>
-      </a>
-    </li>
-  </ul>
+  <div id="fileList">
+    <!-- Add more files here -->
+    <div class="file-card">
+      <strong>Semester 3 Notes</strong><br>
+      <button onclick="window.open('https://drive.google.com/file/d/1kApOvyW9jRycJKO8HM1wwr_2y5FWYW_h/view?usp=sharing', '_blank')">Download</button>
+    </div>
+
+    <div class="file-card">
+      <strong>Python Practical File</strong><br>
+      <button onclick="window.open('https://drive.google.com/file/d/1EXAMPLELINK123/view?usp=sharing', '_blank')">Download</button>
+    </div>
+  </div>
+
+  <script>
+    function filterFiles() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.getElementsByClassName("file-card");
+      for (let card of cards) {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(input) ? "block" : "none";
+      }
+    }
+  </script>
 </body>
 </html>
