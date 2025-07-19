@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - MentoSpark</title>
+  <title>MentoSpark Dashboard</title>
 </head>
 <body>
-  <h2>Welcome to MentoSpark Dashboard</h2>
+  <h2 id="status">Checking login...</h2>
+  <div id="uploadSection" style="display: none;">
+    <p>Welcome Admin or Senior Student!</p>
+    <input type="file" id="fileInput"><br><br>
+    <button onclick="uploadFile()">Upload File</button>
+  </div>
 
-  <!-- This will show who is logged in -->
-  <p id="status">Checking login...</p>
-
-  <!-- This is where upload button will appear only for admin or senior -->
-  <div id="uploadSection"></div>
-
-  <!-- Firebase Auth Script -->
   <script type="module">
-    // Firebase setup
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
@@ -30,40 +28,48 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const storage = getStorage(app);
 
-    // ✅ Add your admin and senior emails here
     const allowedEmails = [
-      "mohdamaan5512@gmail.com",  // You (admin)
-      "senior1@gmail.com",        // Another senior student (example)
-      "senior2@gmail.com"         // Another (add more if needed)
+      "mohdamaan5512@gmail.com",    // Admin
+      "senior1@example.com",        // Add seniors here
+      "senior2@example.com"
     ];
 
-    // ✅ Check who is logged in
+    const statusText = document.getElementById("status");
+    const uploadSection = document.getElementById("uploadSection");
+
     onAuthStateChanged(auth, (user) => {
-      const status = document.getElementById("status");
-      const uploadSection = document.getElementById("uploadSection");
-
       if (user) {
-        status.innerText = "✅ Logged in as: " + user.email;
-
-        if (allowedEmails.includes(user.email)) {
-          // ✅ Show upload option for admin/seniors
-          uploadSection.innerHTML = `
-            <h3>Upload Area (Only for Admin/Senior)</h3>
-            <input type="file"><br><br>
-            <button>Upload</button>
-          `;
+        const email = user.email;
+        if (allowedEmails.includes(email)) {
+          statusText.innerText = "Logged in as " + email;
+          uploadSection.style.display = "block";
         } else {
-          // ❌ If not admin/senior
-          uploadSection.innerHTML = <p>❌ You are not allowed to upload files.</p>;
+          statusText.innerText = "You are logged in as " + email + ", but not allowed to upload.";
         }
-
       } else {
-        // 🔒 Not logged in
-        status.innerText = "You are not logged in. Redirecting...";
-        window.location.href = "login.html";
+        statusText.innerText = "Not logged in. Please log in first.";
+        uploadSection.style.display = "none";
       }
     });
+
+    window.uploadFile = async function () {
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a file to upload.");
+        return;
+      }
+
+      const fileRef = ref(storage, 'uploads/' + file.name);
+      try {
+        await uploadBytes(fileRef, file);
+        alert("File uploaded successfully!");
+      } catch (error) {
+        alert("Upload failed: " + error.message);
+      }
+    }
   </script>
 </body>
 </html>
