@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MentoSpark Premium Subscription</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .plan {
+      background: #fff;
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .plan h2 {
+      margin-top: 0;
+      color: #2e7d32;
+    }
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background-color: #388e3c;
+    }
+    .qr-section {
+      display: none;
+      margin-top: 40px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      border: 2px dashed #4CAF50;
+    }
+    .qr-section img {
+      max-width: 220px;
+      display: block;
+      margin-top: 10px;
+    }
+    iframe {
+      margin-top: 30px;
+      border: none;
+      width: 100%;
+      height: 750px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Subscribe to MentoSpark Premium</h1>
+
+  <div class="plan">
+    <h2>Basic Plan</h2>
+    <p>₹249 / month</p>
+    <button class="btn" onclick="showPayment()">Choose Plan</button>
+  </div>
+
+  <div class="plan">
+    <h2>Standard Plan</h2>
+    <p>₹999 / 6 months <br> <small>Save 30%</small></p>
+    <button class="btn" onclick="showPayment()">Choose Plan</button>
+  </div>
+
+  <div class="plan">
+    <h2>Premium Plan</h2>
+    <p>₹1,799 / year <br> <small>Save 40%</small></p>
+    <button class="btn" onclick="showPayment()">Choose Plan</button>
+  </div>
+
+  <div class="qr-section" id="qrSection">
+    <h2>Step 1: Make Payment</h2>
+    <p>Scan the QR below to pay using Fampay, PhonePe, Paytm or any UPI app.</p>
+    <img src="https://drive.google.com/uc?export=view&id=10bXie1EjG07U1zZix5S4OrG6qnsZbVJW" alt="Fampay QR Code">
+    <p><strong>UPI ID:</strong> aqibjaved@fam</p>
+
+    <h2>Step 2: Confirm Your Payment</h2>
+    <p>After payment, fill this form to activate your subscription.</p>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfwd3JWs4bD_bjDq4JZfNFdYGBexYvz-vMG0rVtsdy0DT9G3Q/viewform?embedded=true" loading="lazy">
+      Loading…
+    </iframe>
+  </div>
+
+  <script>
+    function showPayment() {
+      document.getElementById('qrSection').style.display = 'block';
+      document.getElementById('qrSection').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
