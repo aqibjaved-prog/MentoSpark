@@ -1,124 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MentoSpark Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f6f8;
-      color: #333;
-    }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    }
-    h2, h3 {
-      margin-top: 0;
-    }
-    #status {
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 20px;
-    }
-    #uploadSection {
-      margin-bottom: 40px;
-    }
-    input[type="file"] {
-      padding: 8px;
-      margin-top: 10px;
-    }
-    button {
-      background-color: #0066ff;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #0053cc;
-    }
-    iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-    @media (max-width: 600px) {
-      .container {
-        margin: 20px;
-      }
-      iframe {
-        height: 350px;
-      }
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>MentoSpark Dashboard</h2>
-    <p id="status">Checking login...</p>
+  <h1>Welcome to MentoSpark</h1>
 
-    <div id="uploadSection" style="display: none;">
-      <h3>Upload Files (Admins & Seniors)</h3>
-      <input type="file" id="fileInput"><br>
-      <button onclick="alert('This is a demo. Upload via Google Drive directly.')">Upload File</button>
-    </div>
-
-    <h3>Shared Files</h3>
-    <iframe src="https://drive.google.com/embeddedfolderview?id=1Dl5SFZQ39CurFdjiqvNFYpmTnP1BgwL2#grid"></iframe>
+  <div id="premium-form" style="display: none;">
+    <h2>Subscribe to Premium Plan</h2>
+    <iframe 
+      src="https://docs.google.com/forms/d/e/1FAIpQLSfwd3JWs4bD_bjDq4JZfNFdYGBexYvz-vMG0rVtsdy0DT9G3Q/viewform?embedded=true" 
+      width="100%" 
+      height="800" 
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Loading…
+    </iframe>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  <div id="not-logged-in" style="color: red;"></div>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAD8qGst9qIE_doHHAoA4RXaeIfDEw53XA",
       authDomain: "mentospark-23ad1.firebaseapp.com",
       projectId: "mentospark-23ad1",
-      storageBucket: "mentospark-23ad1.appspot.com",
+      storageBucket: "mentospark-23ad1.firebasestorage.app",
       messagingSenderId: "164763516722",
       appId: "1:164763516722:web:8907112c1b6ad4e6f2212b",
       measurementId: "G-1WXM0GBW68"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
 
-    const allowedEmails = [
-      "mohdamaan5512@gmail.com",
-      "senior1@example.com",
-      "senior2@example.com"
-    ];
-
-    const statusText = document.getElementById("status");
-    const uploadSection = document.getElementById("uploadSection");
-
-    onAuthStateChanged(auth, (user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        const email = user.email;
-        statusText.innerText = "Logged in as: " + email;
-        if (allowedEmails.includes(email)) {
-          uploadSection.style.display = "block";
-        } else {
-          uploadSection.style.display = "none";
-        }
+        document.getElementById("premium-form").style.display = "block";
       } else {
-        statusText.innerText = "Not logged in. Please log in first.";
-        uploadSection.style.display = "none";
+        document.getElementById("not-logged-in").innerText = "❌ Please login to view this page.";
       }
     });
   </script>
